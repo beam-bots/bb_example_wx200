@@ -40,6 +40,11 @@ defmodule BB.Example.WX200.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:bb_liveview, [path: "../bb_liveview", override: true]},
+      {:bb_ik_fabrik, [path: "../bb_ik_fabrik", override: true]},
+      {:bb_servo_robotis, [path: "../bb_servo_robotis", override: true]},
+      {:bb, [path: "../bb", override: true]},
+      {:robotis, path: "../robotis", override: true},
       {:igniter, "~> 0.6", only: [:dev, :test]},
       {:phoenix, "~> 1.8.3"},
       {:phoenix_html, "~> 4.1"},

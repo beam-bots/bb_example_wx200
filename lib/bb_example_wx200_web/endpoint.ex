@@ -27,6 +27,11 @@ defmodule BB.Example.WX200Web.Endpoint do
     only: BB.Example.WX200Web.static_paths(),
     raise_on_missing_only: code_reloading?
 
+  plug Plug.Static,
+    at: "/__bb_assets__",
+    from: {:bb_liveview, "priv/static"},
+    gzip: false
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do

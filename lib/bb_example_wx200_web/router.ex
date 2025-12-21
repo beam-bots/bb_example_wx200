@@ -1,5 +1,6 @@
 defmodule BB.Example.WX200Web.Router do
   use BB.Example.WX200Web, :router
+  import BB.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -17,7 +18,7 @@ defmodule BB.Example.WX200Web.Router do
   scope "/", BB.Example.WX200Web do
     pipe_through :browser
 
-    get "/", PageController, :home
+    bb_dashboard("/", robot: BB.Example.WX200.Robot)
   end
 
   # Other scopes may use custom stacks.

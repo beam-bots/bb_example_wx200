@@ -14,7 +14,8 @@ defmodule BB.Example.WX200.Application do
       # Start a worker by calling: BB.Example.WX200.Worker.start_link(arg)
       # {BB.Example.WX200.Worker, arg},
       # Start to serve requests, typically the last entry
-      BB.Example.WX200Web.Endpoint
+      BB.Example.WX200Web.Endpoint,
+      {BB.Example.WX200.Robot, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
