@@ -15,7 +15,7 @@ defmodule BB.Example.WX200.Application do
       # {BB.Example.WX200.Worker, arg},
       # Start to serve requests, typically the last entry
       BB.Example.WX200Web.Endpoint,
-      {BB.Example.WX200.Robot, []}
+      {BB.Example.WX200.Robot, robot_opts()}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -30,5 +30,13 @@ defmodule BB.Example.WX200.Application do
   def config_change(changed, _new, removed) do
     BB.Example.WX200Web.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp robot_opts do
+    if System.get_env("SIMULATE") do
+      [simulation: :kinematic]
+    else
+      []
+    end
   end
 end

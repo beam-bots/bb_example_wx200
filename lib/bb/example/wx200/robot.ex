@@ -2,7 +2,7 @@ defmodule BB.Example.WX200.Robot do
   use BB
 
   parameters do
-    bridge(:robotis, {BB.Servo.Robotis.Bridge, controller: :dynamixel})
+    bridge(:robotis, {BB.Servo.Robotis.Bridge, controller: :dynamixel}, simulation: :mock)
 
     group :config do
       group :robotis do
@@ -54,7 +54,8 @@ defmodule BB.Example.WX200.Robot do
        port: param([:config, :robotis, :device]),
        baud_rate: param([:config, :robotis, :baud_rate]),
        control_table: Robotis.ControlTable,
-       disarm_action: :hold}
+       disarm_action: :hold},
+      simulation: :mock
     )
   end
 
