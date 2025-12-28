@@ -20,10 +20,13 @@ defmodule BB.Example.WX200.Command.DemoCircle do
   @behaviour BB.Command
 
   alias BB.IK.FABRIK.Motion
+  alias BB.Math.Vec3
 
   # Safe starting position - comfortably within workspace
   # X forward, Y=0 (centred), Z at reasonable height
-  @start_position {0.25, 0.0, 0.20}
+  @start_x 0.25
+  @start_y 0.0
+  @start_z 0.20
 
   @default_radius 0.03
   @default_points 16
@@ -35,20 +38,20 @@ defmodule BB.Example.WX200.Command.DemoCircle do
     points = Map.get(goal, :points, @default_points)
     delay = Map.get(goal, :delay, @default_delay)
 
-    {cx, cy, cz} = @start_position
+    start_position = Vec3.new(@start_x, @start_y, @start_z)
 
     # First move to the starting position
-    case Motion.move_to(context, :ee_link, @start_position, delivery: :direct) do
+    case Motion.move_to(context, :ee_link, start_position, delivery: :direct) do
       {:ok, _meta} ->
         Process.sleep(500)
 
         # Generate circle points in XZ plane (vertical, forward-back motion)
-        targets = generate_circle_points({cx, cy, cz}, radius, points)
+        targets = generate_circle_points(@start_x, @start_y, @start_z, radius, points)
 
         case execute_path(context, targets, delay) do
           :ok ->
             # Return to start position
-            Motion.move_to(context, :ee_link, @start_position, delivery: :direct)
+            Motion.move_to(context, :ee_link, start_position, delivery: :direct)
             {:ok, :complete}
 
           {:error, reason} ->
@@ -60,13 +63,13 @@ defmodule BB.Example.WX200.Command.DemoCircle do
     end
   end
 
-  defp generate_circle_points({cx, cy, cz}, radius, num_points) do
+  defp generate_circle_points(cx, cy, cz, radius, num_points) do
     # Circle in XZ plane - Y stays constant
     for i <- 0..num_points do
       angle = 2 * :math.pi() * i / num_points
       x = cx + radius * :math.cos(angle)
       z = cz + radius * :math.sin(angle)
-      {x, cy, z}
+      Vec3.new(x, cy, z)
     end
   end
 
