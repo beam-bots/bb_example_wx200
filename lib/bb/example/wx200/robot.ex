@@ -3,6 +3,21 @@ defmodule BB.Example.WX200.Robot do
 
   parameters do
     bridge(:robotis, {BB.Servo.Robotis.Bridge, controller: :dynamixel})
+
+    group :config do
+      group :robotis do
+        param(:device,
+          type: :string,
+          doc: "The serial device connected to the Robotis controller"
+        )
+
+        param(:baud_rate,
+          type: :integer,
+          doc: "The communications speed for the serial port",
+          default: 1_000_000
+        )
+      end
+    end
   end
 
   commands do
@@ -36,7 +51,10 @@ defmodule BB.Example.WX200.Robot do
     controller(
       :dynamixel,
       {BB.Servo.Robotis.Controller,
-       port: "/dev/ttyUSB0", baud_rate: 1_000_000, control_table: :xm430, disarm_action: :hold}
+       port: param([:config, :robotis, :device]),
+       baud_rate: param([:config, :robotis, :baud_rate]),
+       control_table: Robotis.ControlTable,
+       disarm_action: :hold}
     )
   end
 
