@@ -41,7 +41,7 @@ defmodule BB.Example.WX200.MixProject do
   defp deps do
     [
       {:bb_liveview, [path: "../bb_liveview", override: true]},
-      {:bb_ik_fabrik, [path: "../bb_ik_fabrik", override: true]},
+      {:bb_ik_dls, [path: "../bb_ik_dls", override: true]},
       {:bb_servo_robotis, [path: "../bb_servo_robotis", override: true]},
       {:bb, [path: "../bb", override: true]},
       {:robotis, path: "../robotis", override: true},

@@ -1,6 +1,6 @@
 defmodule BB.Example.WX200.Command.DemoCircle do
   @moduledoc """
-  Demo command that traces a circle using FABRIK IK.
+  Demo command that traces a circle using DLS IK.
 
   First moves to a safe starting position, then traces a small circle
   in the XZ plane (vertical plane in front of the robot).
@@ -19,7 +19,7 @@ defmodule BB.Example.WX200.Command.DemoCircle do
   """
   @behaviour BB.Command
 
-  alias BB.IK.FABRIK.Motion
+  alias BB.IK.DLS.Motion
   alias BB.Math.Vec3
 
   # Safe starting position - comfortably within workspace
@@ -28,7 +28,7 @@ defmodule BB.Example.WX200.Command.DemoCircle do
   @start_y 0.0
   @start_z 0.20
 
-  @default_radius 0.03
+  @default_radius 0.05
   @default_points 16
   @default_delay 150
 
@@ -40,18 +40,21 @@ defmodule BB.Example.WX200.Command.DemoCircle do
 
     start_position = Vec3.new(@start_x, @start_y, @start_z)
 
+    # Exclude gripper from IK - it's an end-effector, not a positioning joint
+    ik_opts = [delivery: :direct, exclude_joints: [:gripper]]
+
     # First move to the starting position
-    case Motion.move_to(context, :ee_link, start_position, delivery: :direct) do
+    case Motion.move_to(context, :ee_link, start_position, ik_opts) do
       {:ok, _meta} ->
         Process.sleep(500)
 
         # Generate circle points in XZ plane (vertical, forward-back motion)
         targets = generate_circle_points(@start_x, @start_y, @start_z, radius, points)
 
-        case execute_path(context, targets, delay) do
+        case execute_path(context, targets, delay, ik_opts) do
           :ok ->
             # Return to start position
-            Motion.move_to(context, :ee_link, start_position, delivery: :direct)
+            Motion.move_to(context, :ee_link, start_position, ik_opts)
             {:ok, :complete}
 
           {:error, reason} ->
@@ -73,9 +76,9 @@ defmodule BB.Example.WX200.Command.DemoCircle do
     end
   end
 
-  defp execute_path(context, targets, delay) do
+  defp execute_path(context, targets, delay, ik_opts) do
     Enum.reduce_while(targets, :ok, fn target, :ok ->
-      case Motion.move_to(context, :ee_link, target, delivery: :direct) do
+      case Motion.move_to(context, :ee_link, target, ik_opts) do
         {:ok, _meta} ->
           Process.sleep(delay)
           {:cont, :ok}
