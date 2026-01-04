@@ -16,16 +16,16 @@ defmodule BB.Example.WX200.Command.Home do
 
   Then execute:
 
-      {:ok, task} = BB.Example.WX200.Robot.home()
-      {:ok, :homed} = Task.await(task)
+      {:ok, cmd} = BB.Example.WX200.Robot.home()
+      {:ok, :homed} = BB.Command.await(cmd)
 
   """
-  @behaviour BB.Command
+  use BB.Command
 
   alias BB.Robot.Joint
 
-  @impl true
-  def handle_command(_goal, context) do
+  @impl BB.Command
+  def handle_command(_goal, context, state) do
     positions =
       context.robot.joints
       |> Enum.filter(fn {_name, joint} -> Joint.movable?(joint) end)
@@ -33,6 +33,9 @@ defmodule BB.Example.WX200.Command.Home do
 
     BB.Motion.send_positions(context, positions, delivery: :direct)
 
-    {:ok, :homed}
+    {:stop, :normal, %{state | result: :homed}}
   end
+
+  @impl BB.Command
+  def result(%{result: result}), do: {:ok, result}
 end
