@@ -14,10 +14,10 @@ defmodule BB.Example.WX200.Command.DemoCircle do
 
   ## Usage
 
-      {:ok, task} = BB.Example.WX200.Robot.demo_circle()
-      {:ok, :complete} = Task.await(task, 30_000)
+      {:ok, cmd} = BB.Example.WX200.Robot.demo_circle()
+      {:ok, :complete} = BB.Command.await(cmd, 30_000)
   """
-  @behaviour BB.Command
+  use BB.Command
 
   alias BB.IK.DLS.Motion
   alias BB.Math.Vec3
@@ -32,8 +32,8 @@ defmodule BB.Example.WX200.Command.DemoCircle do
   @default_points 16
   @default_delay 150
 
-  @impl true
-  def handle_command(goal, context) do
+  @impl BB.Command
+  def handle_command(goal, context, state) do
     radius = Map.get(goal, :radius, @default_radius)
     points = Map.get(goal, :points, @default_points)
     delay = Map.get(goal, :delay, @default_delay)
@@ -55,16 +55,20 @@ defmodule BB.Example.WX200.Command.DemoCircle do
           :ok ->
             # Return to start position
             Motion.move_to(context, :ee_link, start_position, ik_opts)
-            {:ok, :complete}
+            {:stop, :normal, %{state | result: :complete}}
 
           {:error, reason} ->
-            {:error, reason}
+            {:stop, :normal, %{state | result: {:error, reason}}}
         end
 
       {:error, reason, _meta} ->
-        {:error, {:failed_to_reach_start, reason}}
+        {:stop, :normal, %{state | result: {:error, {:failed_to_reach_start, reason}}}}
     end
   end
+
+  @impl BB.Command
+  def result(%{result: {:error, _} = error}), do: error
+  def result(%{result: result}), do: {:ok, result}
 
   defp generate_circle_points(cx, cy, cz, radius, num_points) do
     # Circle in XZ plane - Y stays constant

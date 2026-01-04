@@ -16,23 +16,30 @@ defmodule BB.Example.WX200.Command.DisableTorque do
 
   Then execute:
 
-      {:ok, task} = BB.Example.WX200.Robot.disable_torque()
-      {:ok, :torque_disabled} = Task.await(task)
+      {:ok, cmd} = BB.Example.WX200.Robot.disable_torque()
+      {:ok, :torque_disabled} = BB.Command.await(cmd)
 
   """
-  @behaviour BB.Command
+  use BB.Command
 
   @controller :dynamixel
 
-  @impl true
-  def handle_command(_goal, context) do
+  @impl BB.Command
+  def handle_command(_goal, context, state) do
     robot = context.robot_module
 
-    with {:ok, servo_ids} <- BB.Process.call(robot, @controller, :list_servos),
-         :ok <- disable_all_servos(robot, servo_ids) do
-      {:ok, :torque_disabled}
-    end
+    result =
+      with {:ok, servo_ids} <- BB.Process.call(robot, @controller, :list_servos),
+           :ok <- disable_all_servos(robot, servo_ids) do
+        :torque_disabled
+      end
+
+    {:stop, :normal, %{state | result: result}}
   end
+
+  @impl BB.Command
+  def result(%{result: {:error, _} = error}), do: error
+  def result(%{result: result}), do: {:ok, result}
 
   defp disable_all_servos(robot, servo_ids) do
     results =
