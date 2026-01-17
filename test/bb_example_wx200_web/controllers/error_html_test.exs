@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200Web.ErrorHTMLTest do
   use BB.Example.WX200Web.ConnCase, async: true
 
@@ -9,6 +13,7 @@ defmodule BB.Example.WX200Web.ErrorHTMLTest do
   end
 
   test "renders 500.html" do
-    assert render_to_string(BB.Example.WX200Web.ErrorHTML, "500", "html", []) == "Internal Server Error"
+    assert render_to_string(BB.Example.WX200Web.ErrorHTML, "500", "html", []) ==
+             "Internal Server Error"
   end
 end

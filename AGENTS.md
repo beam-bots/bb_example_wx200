@@ -6,15 +6,24 @@ This file provides guidance to AI coding assistants when working with code in th
 
 Example Phoenix application demonstrating the BB (Beam Bots) robotics framework with a WidowX 200 robot arm. This project integrates `bb_liveview` to provide a real-time web dashboard for robot control and 3D visualisation.
 
-## Commands
+## Build and Test Commands
+
+```bash
+mix check --no-retry    # Run all checks (compile, test, format, credo, dialyzer, reuse)
+mix test                # Run tests
+mix test path/to/test.exs:42  # Run single test at line
+mix format              # Format code
+mix credo --strict      # Linting
+```
+
+The project uses `ex_check` - always prefer `mix check --no-retry` over running individual tools.
+
+## Phoenix Commands
 
 ```bash
 mix setup              # Install deps and build assets
 mix phx.server         # Start Phoenix server (localhost:4000)
 iex -S mix phx.server  # Start with IEx shell
-mix test               # Run all tests
-mix test path:42       # Run single test at line
-mix precommit          # Pre-commit checks (compile warnings, format, test)
 ```
 
 ## Architecture

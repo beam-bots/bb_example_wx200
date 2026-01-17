@@ -1,9 +1,15 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
 
   use Application
+
+  alias BB.Example.WX200Web.Endpoint
 
   @impl true
   def start(_type, _args) do
@@ -28,15 +34,21 @@ defmodule BB.Example.WX200.Application do
   # whenever the application is updated.
   @impl true
   def config_change(changed, _new, removed) do
-    BB.Example.WX200Web.Endpoint.config_change(changed, removed)
+    Endpoint.config_change(changed, removed)
     :ok
   end
 
   defp robot_opts do
-    if System.get_env("SIMULATE") do
-      [simulation: :kinematic]
-    else
-      []
+    case Application.get_env(:bb_example_wx200, :robot_simulation) do
+      nil ->
+        if System.get_env("SIMULATE") do
+          [simulation: :kinematic]
+        else
+          []
+        end
+
+      mode ->
+        [simulation: mode]
     end
   end
 end

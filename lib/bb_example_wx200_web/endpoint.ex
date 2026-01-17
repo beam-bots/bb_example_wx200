@@ -1,5 +1,11 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200Web.Endpoint do
   use Phoenix.Endpoint, otp_app: :bb_example_wx200
+
+  alias BB.Example.WX200Web
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
@@ -24,7 +30,7 @@ defmodule BB.Example.WX200Web.Endpoint do
     at: "/",
     from: :bb_example_wx200,
     gzip: not code_reloading?,
-    only: BB.Example.WX200Web.static_paths(),
+    only: WX200Web.static_paths(),
     raise_on_missing_only: code_reloading?
 
   plug Plug.Static,

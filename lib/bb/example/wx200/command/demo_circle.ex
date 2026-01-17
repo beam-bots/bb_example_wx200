@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200.Command.DemoCircle do
   @moduledoc """
   Demo command that traces a circle using DLS IK.
@@ -45,7 +49,7 @@ defmodule BB.Example.WX200.Command.DemoCircle do
 
     # First move to the starting position
     case Motion.move_to(context, :ee_link, start_position, ik_opts) do
-      {:ok, _meta} ->
+      {:ok, %{reached: true}} ->
         Process.sleep(500)
 
         # Generate circle points in XZ plane (vertical, forward-back motion)
@@ -61,8 +65,8 @@ defmodule BB.Example.WX200.Command.DemoCircle do
             {:stop, :normal, %{state | result: {:error, reason}}}
         end
 
-      {:error, reason, _meta} ->
-        {:stop, :normal, %{state | result: {:error, {:failed_to_reach_start, reason}}}}
+      {:ok, %{reached: false, residual: residual}} ->
+        {:stop, :normal, %{state | result: {:error, {:failed_to_reach_start, residual}}}}
     end
   end
 
@@ -83,12 +87,12 @@ defmodule BB.Example.WX200.Command.DemoCircle do
   defp execute_path(context, targets, delay, ik_opts) do
     Enum.reduce_while(targets, :ok, fn target, :ok ->
       case Motion.move_to(context, :ee_link, target, ik_opts) do
-        {:ok, _meta} ->
+        {:ok, %{reached: true}} ->
           Process.sleep(delay)
           {:cont, :ok}
 
-        {:error, reason, _meta} ->
-          {:halt, {:error, {:ik_failed, target, reason}}}
+        {:ok, %{reached: false, residual: residual}} ->
+          {:halt, {:error, {:ik_failed, target, residual}}}
       end
     end)
   end

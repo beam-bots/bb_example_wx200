@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200Web do
   @moduledoc """
   The entrypoint for defining your web interface, such
@@ -88,8 +92,8 @@ defmodule BB.Example.WX200Web do
       import BB.Example.WX200Web.CoreComponents
 
       # Common modules used in templates
-      alias Phoenix.LiveView.JS
       alias BB.Example.WX200Web.Layouts
+      alias Phoenix.LiveView.JS
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())
@@ -101,7 +105,7 @@ defmodule BB.Example.WX200Web do
       use Phoenix.VerifiedRoutes,
         endpoint: BB.Example.WX200Web.Endpoint,
         router: BB.Example.WX200Web.Router,
-        statics: BB.Example.WX200Web.static_paths()
+        statics: unquote(__MODULE__).static_paths()
     end
   end
 
