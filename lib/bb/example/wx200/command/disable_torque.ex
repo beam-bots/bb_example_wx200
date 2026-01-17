@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200.Command.DisableTorque do
   @moduledoc """
   Command handler to disable holding torque on all Robotis servos.

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200.Command.Home do
   @moduledoc """
   Command handler to move all joints to their neutral (zero) positions.

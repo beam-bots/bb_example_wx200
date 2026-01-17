@@ -1,4 +1,11 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200.Robot do
+  @moduledoc """
+  WidowX 200 robot arm definition using the BB framework DSL.
+  """
   use BB
 
   parameters do
@@ -418,7 +425,8 @@ defmodule BB.Example.WX200.Robot do
 
                             sensor(
                               :mimic,
-                              {BB.Sensor.Mimic, source: :left_finger, multiplier: 1.0, offset: 0.0}
+                              {BB.Sensor.Mimic,
+                               source: :left_finger, multiplier: 1.0, offset: 0.0}
                             )
 
                             link :right_finger_link do

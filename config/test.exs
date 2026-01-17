@@ -1,4 +1,11 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 import Config
+
+# Run robot in simulation mode during tests
+config :bb_example_wx200, :robot_simulation, :kinematic
 
 # We don't run a server during test. If one is required,
 # you can enable the server option below.

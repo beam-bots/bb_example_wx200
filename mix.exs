@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200.MixProject do
   use Mix.Project
 
@@ -47,14 +51,8 @@ defmodule BB.Example.WX200.MixProject do
       {:bb_servo_robotis, bb_dep("~> 0.2", :bb_servo_robotis)},
       {:phoenix, "~> 1.8.3"},
       {:phoenix_html, "~> 4.1"},
-      {:igniter, "~> 0.6", only: [:dev, :test]},
-      {:tidewave, "~> 0.5", only: [:dev]},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_view, "~> 1.1.0"},
-      {:lazy_html, ">= 0.1.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.2.0",
@@ -67,7 +65,22 @@ defmodule BB.Example.WX200.MixProject do
       {:gettext, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+
+      # dev/test
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
+      {:ex_check, "~> 0.16", only: [:dev, :test], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: [:dev, :test], runtime: false},
+      {:git_ops, "~> 2.9", only: [:dev, :test], runtime: false},
+      {:igniter, "~> 0.6", only: [:dev, :test], runtime: false},
+      {:lazy_html, ">= 0.1.0", only: :test},
+      {:mimic, "~> 2.2", only: :test, runtime: false},
+      {:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
+      {:tidewave, "~> 0.5", only: [:dev]}
     ]
   end
 

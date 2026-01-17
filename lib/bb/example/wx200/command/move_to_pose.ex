@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200.Command.MoveToPose do
   @moduledoc """
   Command to move the end effector to a target position using IK.
@@ -23,11 +27,11 @@ defmodule BB.Example.WX200.Command.MoveToPose do
     ik_opts = [delivery: :direct, exclude_joints: [:gripper]]
 
     case Motion.move_to(context, :ee_link, target, ik_opts) do
-      {:ok, _meta} ->
+      {:ok, %{reached: true}} ->
         {:stop, :normal, %{state | result: :reached}}
 
-      {:error, reason, _meta} ->
-        {:stop, :normal, %{state | result: {:error, {:ik_failed, reason}}}}
+      {:ok, %{reached: false, residual: residual}} ->
+        {:stop, :normal, %{state | result: {:error, {:ik_failed, {:not_reached, residual}}}}}
     end
   end
 

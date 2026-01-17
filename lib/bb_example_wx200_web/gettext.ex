@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2026 James Harton
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule BB.Example.WX200Web.Gettext do
   @moduledoc """
   A module providing Internationalization with a gettext-based API.
