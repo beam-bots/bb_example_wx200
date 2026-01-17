@@ -2,7 +2,7 @@ defmodule BB.Example.WX200.Robot do
   use BB
 
   parameters do
-    bridge(:robotis, {BB.Servo.Robotis.Bridge, controller: :dynamixel}, simulation: :mock)
+    bridge(:robotis_bridge, {BB.Servo.Robotis.Bridge, controller: :dynamixel}, simulation: :mock)
 
     group :config do
       group :robotis do
@@ -38,6 +38,11 @@ defmodule BB.Example.WX200.Robot do
 
     command :home do
       handler(BB.Example.WX200.Command.Home)
+      allowed_states([:idle])
+    end
+
+    command :move_to_pose do
+      handler(BB.Example.WX200.Command.MoveToPose)
       allowed_states([:idle])
     end
 
@@ -331,7 +336,7 @@ defmodule BB.Example.WX200.Robot do
 
                           # Gripper - left finger (prismatic)
                           # The gripper servo (ID 7) drives a linear mechanism
-                          joint :gripper do
+                          joint :left_finger do
                             type(:prismatic)
 
                             origin do
@@ -339,26 +344,26 @@ defmodule BB.Example.WX200.Robot do
                             end
 
                             axis do
-                              pitch(~u(90 degree))
+                              roll(~u(-90 degree))
                             end
 
                             limit do
-                              # Finger stroke: 15mm to 37mm from centre
-                              lower(~u(0.015 meter))
+                              # Finger stroke: 5mm (closed/touching) to 37mm (open) from centre
+                              lower(~u(0.005 meter))
                               upper(~u(0.037 meter))
                               effort(~u(5 newton))
                               velocity(~u(0.05 meter_per_second))
                             end
 
-                            # Note: Gripper actuation requires custom handling
-                            # as the servo rotation maps to linear finger motion.
+                            actuator(
+                              :gripper_servo,
+                              {BB.Servo.Robotis.Actuator, servo_id: 7, controller: :dynamixel}
+                            )
 
                             link :left_finger_link do
-                              # Finger
                               visual do
                                 origin do
                                   x(~u(0.02 meter))
-                                  y(~u(0.015 meter))
                                 end
 
                                 box do
@@ -368,7 +373,7 @@ defmodule BB.Example.WX200.Robot do
                                 end
 
                                 material do
-                                  name(:finger_grey)
+                                  name(:left_finger_grey)
 
                                   color do
                                     red(0.4)
@@ -387,6 +392,57 @@ defmodule BB.Example.WX200.Robot do
                                 end
 
                                 link(:ee_link)
+                              end
+                            end
+                          end
+
+                          # Gripper - right finger (prismatic, mirrored)
+                          # Position derived from left finger via mimic sensor
+                          joint :right_finger do
+                            type(:prismatic)
+
+                            origin do
+                              x(~u(0.0415 meter))
+                            end
+
+                            axis do
+                              roll(~u(90 degree))
+                            end
+
+                            limit do
+                              lower(~u(0.005 meter))
+                              upper(~u(0.037 meter))
+                              effort(~u(5 newton))
+                              velocity(~u(0.05 meter_per_second))
+                            end
+
+                            sensor(
+                              :mimic,
+                              {BB.Sensor.Mimic, source: :left_finger, multiplier: 1.0, offset: 0.0}
+                            )
+
+                            link :right_finger_link do
+                              visual do
+                                origin do
+                                  x(~u(0.02 meter))
+                                end
+
+                                box do
+                                  x(~u(0.04 meter))
+                                  y(~u(0.01 meter))
+                                  z(~u(0.02 meter))
+                                end
+
+                                material do
+                                  name(:right_finger_grey)
+
+                                  color do
+                                    red(0.4)
+                                    green(0.4)
+                                    blue(0.4)
+                                    alpha(1.0)
+                                  end
+                                end
                               end
                             end
                           end
