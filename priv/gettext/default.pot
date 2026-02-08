@@ -11,28 +11,28 @@
 msgid ""
 msgstr ""
 
-#: lib/bb_example_wx200_web/components/core_components.ex:368
+#: lib/bb_example_wx200_web/components/core_components.ex:373
 #, elixir-autogen, elixir-format
 msgid "Actions"
 msgstr ""
 
-#: lib/bb_example_wx200_web/components/layouts.ex:99
-#: lib/bb_example_wx200_web/components/layouts.ex:111
+#: lib/bb_example_wx200_web/components/layouts.ex:103
+#: lib/bb_example_wx200_web/components/layouts.ex:115
 #, elixir-autogen, elixir-format
 msgid "Attempting to reconnect"
 msgstr ""
 
-#: lib/bb_example_wx200_web/components/layouts.ex:106
+#: lib/bb_example_wx200_web/components/layouts.ex:110
 #, elixir-autogen, elixir-format
 msgid "Something went wrong!"
 msgstr ""
 
-#: lib/bb_example_wx200_web/components/layouts.ex:94
+#: lib/bb_example_wx200_web/components/layouts.ex:98
 #, elixir-autogen, elixir-format
 msgid "We can't find the internet"
 msgstr ""
 
-#: lib/bb_example_wx200_web/components/core_components.ex:74
+#: lib/bb_example_wx200_web/components/core_components.ex:79
 #, elixir-autogen, elixir-format
 msgid "close"
 msgstr ""
