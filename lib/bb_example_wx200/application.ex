@@ -39,16 +39,31 @@ defmodule BB.Example.WX200.Application do
   end
 
   defp robot_opts do
-    case Application.get_env(:bb_example_wx200, :robot_simulation) do
-      nil ->
-        if System.get_env("SIMULATE") do
-          [simulation: :kinematic]
-        else
-          []
-        end
+    []
+    |> maybe_simulate()
+    |> set_port()
+  end
 
-      mode ->
-        [simulation: mode]
+  defp maybe_simulate(opts) do
+    case Application.get_env(:bb_example_wx200, :robot_simulation) do
+      nil -> opts
+      mode -> Keyword.put(opts, :simulation, mode)
     end
+  end
+
+  defp set_port(opts) do
+    port = Application.get_env(:bb_example_wx200, :robotis_device, "/dev/ttyUSB0")
+
+    opts
+    |> Keyword.update(:params, [config: [robotis: [device: port]]], fn params ->
+      params
+      |> Keyword.update(:config, [robotis: [device: port]], fn config ->
+        config
+        |> Keyword.update(:robotis, [device: port], fn robotis ->
+          robotis
+          |> Keyword.update(:put, :device, port)
+        end)
+      end)
+    end)
   end
 end

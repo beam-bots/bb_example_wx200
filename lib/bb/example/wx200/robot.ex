@@ -65,7 +65,7 @@ defmodule BB.Example.WX200.Robot do
       {BB.Servo.Robotis.Controller,
        port: param([:config, :robotis, :device]),
        baud_rate: param([:config, :robotis, :baud_rate]),
-       control_table: Robotis.ControlTable,
+       control_table: Robotis.ControlTable.XM430,
        disarm_action: :hold},
       simulation: :mock
     )
