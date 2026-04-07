@@ -54,16 +54,12 @@ defmodule BB.Example.WX200.Application do
   defp set_port(opts) do
     port = Application.get_env(:bb_example_wx200, :robotis_device, "/dev/ttyUSB0")
 
-    opts
-    |> Keyword.update(:params, [config: [robotis: [device: port]]], fn params ->
-      params
-      |> Keyword.update(:config, [robotis: [device: port]], fn config ->
-        config
-        |> Keyword.update(:robotis, [device: port], fn robotis ->
-          robotis
-          |> Keyword.update(:put, :device, port)
-        end)
-      end)
+    Keyword.update(opts, :params, [config: [robotis: [device: port]]], fn params ->
+      Keyword.update(params, :config, [robotis: [device: port]], &put_robotis_device(&1, port))
     end)
+  end
+
+  defp put_robotis_device(config, port) do
+    Keyword.update(config, :robotis, [device: port], &Keyword.put(&1, :device, port))
   end
 end

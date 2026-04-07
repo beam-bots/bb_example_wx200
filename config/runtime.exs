@@ -31,7 +31,9 @@ if System.get_env("SIMULATE") do
   config :bb_example_wx200, robot_simulation: :kinematic
 end
 
-config :bb_example_wx200, robotis_device: System.get_env("ROBOTIS_DEVICE")
+if device = System.get_env("ROBOTIS_DEVICE") do
+  config :bb_example_wx200, robotis_device: device
+end
 
 if config_env() == :prod do
   # The secret key base is used to sign/encrypt cookies and other secrets.

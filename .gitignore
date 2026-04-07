@@ -39,3 +39,5 @@ bb_example_wx200-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# Claude Code local settings
+/.claude/
