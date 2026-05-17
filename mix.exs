@@ -14,6 +14,7 @@ defmodule BB.Example.WX200.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
+      dialyzer: [plt_add_apps: [:ex_unit, :mix]],
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       listeners: [Phoenix.CodeReloader]
     ]
@@ -44,7 +45,7 @@ defmodule BB.Example.WX200.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bb, bb_dep("~> 0.14")},
+      {:bb, bb_dep("~> 0.16")},
       {:bb_ik_dls, bb_dep("~> 0.3", :bb_ik_dls)},
       {:bb_liveview, bb_dep("~> 0.2", :bb_liveview)},
       {:bb_reactor, bb_dep("~> 0.2", :bb_reactor)},
