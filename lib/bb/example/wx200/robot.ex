@@ -162,9 +162,14 @@ defmodule BB.Example.WX200.Robot do
               velocity(~u(180 degree_per_second))
             end
 
+            transmission do
+              offset(~u(2.5 degree))
+              reversed?(true)
+            end
+
             actuator(
               :shoulder_servo,
-              {BB.Servo.Robotis.Actuator, servo_id: 2, controller: :dynamixel, reverse?: true}
+              {BB.Servo.Robotis.Actuator, servo_id: 2, controller: :dynamixel}
             )
 
             link :upper_arm_link do
