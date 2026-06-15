@@ -52,7 +52,7 @@ defmodule BB.Example.WX200.MixProject do
       {:bb_servo_robotis, bb_dep("~> 0.2", :bb_servo_robotis)},
       {:phoenix, "~> 1.8.3"},
       {:phoenix_html, "~> 4.1"},
-      {:phoenix_live_view, "~> 1.1.0"},
+      {:phoenix_live_view, "~> 1.2.1"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:heroicons,
        github: "tailwindlabs/heroicons",
