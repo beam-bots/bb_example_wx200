@@ -22,7 +22,7 @@ defmodule BB.Example.WX200.Reactor.PickAndPlace do
       {:ok, result} = Reactor.run(
         BB.Example.WX200.Reactor.PickAndPlace,
         %{pick_pose: pick_pose, place_pose: place_pose},
-        context: %{private: %{bb_robot: BB.Example.WX200.Robot}}
+        %{private: %{bb_robot: BB.Example.WX200.Robot}}
       )
 
   ## Safety
