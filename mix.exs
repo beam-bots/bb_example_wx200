@@ -78,7 +78,6 @@ defmodule BB.Example.WX200.MixProject do
       {:igniter, "~> 0.6", only: [:dev, :test], runtime: false},
       {:lazy_html, ">= 0.1.0", only: :test},
       {:mimic, "~> 2.2", only: :test, runtime: false},
-      {:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
       {:tidewave, "~> 0.5", only: [:dev]}
